@@ -1,5 +1,11 @@
-import { MiningRig } from "@/components/earn/MiningRig"
+"use client"
+
+import { EarnTab } from "@/components/earn/EarnTab"
 
 export default function EarnPage() {
-    return <MiningRig className="min-h-screen bg-black p-4 md:p-8" />
+    return (
+        <div className="w-full min-h-screen bg-black p-4 md:p-8">
+            <EarnTab />
+        </div>
+    )
 }

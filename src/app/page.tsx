@@ -6,7 +6,7 @@ import { NetWorthCard } from "@/components/dashboard/NetWorthCard";
 import { PerformanceChart } from "@/components/dashboard/PerformanceChart";
 import { KPIGrid } from "@/components/dashboard/KPIGrid";
 import { VestingTimer } from "@/components/dashboard/VestingTimer";
-import { MiningRig } from "@/components/earn/MiningRig";
+import { EarnTab } from "@/components/earn/EarnTab";
 import { MarketplacePage } from "@/components/marketplace/MarketplacePage";
 import { GovernancePage } from "@/components/governance/GovernancePage";
 import { useState } from "react";
@@ -105,7 +105,7 @@ export default function Home() {
           {/* Tab Content: Mining Terminal */}
           {activeTab === 'mining' && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-500 py-4">
-              <MiningRig className="py-8" />
+              <EarnTab className="py-8" />
             </div>
           )}
 

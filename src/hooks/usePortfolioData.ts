@@ -78,9 +78,18 @@ export function usePortfolioData() {
             }
         }, 5000)
 
+        const handleUpdate = () => {
+            if (mounted) {
+                // Optionally set loading state again if desired, but for smooth background refresh we might not want to
+                load()
+            }
+        }
+        window.addEventListener('portfolio-updated', handleUpdate)
+
         return () => {
             mounted = false
             clearTimeout(timeout)
+            window.removeEventListener('portfolio-updated', handleUpdate)
         }
     }, [])
 
