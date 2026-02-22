@@ -19,9 +19,10 @@ export interface HabitConfig {
 export function calculateTokens(reps: number, repsPerToken: number, minGain: number): number {
     const raw = reps / repsPerToken
     if (raw < minGain) return 0
-    // For GT (minGain=1): floor. For RT (minGain=0.5): round to 0.5
-    if (minGain >= 1) return Math.floor(raw)
-    return Math.floor(raw / minGain) * minGain
+    // Fix JS floating point precision issues (e.g. 0.3 / 0.1 = 2.9999999999999996)
+    // Add small epsilon (1e-9) to round up those trailing nines before floor
+    const steps = Math.floor((raw / minGain) + 1e-9)
+    return Number((steps * minGain).toFixed(4))
 }
 
 // ── Hook ──────────────────────────────────────────────────────────
