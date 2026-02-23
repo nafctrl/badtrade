@@ -17,7 +17,7 @@ export default function PortfolioPage() {
 
     return (
         <div className="min-h-screen bg-brand-black text-white font-sans selection:bg-brand-gold/30">
-            <main className="max-w-[1400px] mx-auto px-4 lg:px-8 py-8">
+            <main className="lg:pl-52 max-w-[1600px] mx-auto px-4 lg:px-8 py-8">
 
                 {/* Header */}
                 <header className="flex justify-between items-center mb-8">
@@ -74,18 +74,20 @@ export default function PortfolioPage() {
                             <KPIGrid
                                 pushupCount={portfolioData.pushupCount}
                                 pushupTrend={portfolioData.pushupTrend}
+                                pullupCount={portfolioData.pullupCount}
+                                pullupTrend={portfolioData.pullupTrend}
                                 loading={portfolioData.loading}
                             />
                         </div>
                     </div>
 
                     {/* Vesting Timer */}
-                    <div className="md:col-span-12 lg:col-span-4 xl:col-span-3">
+                    <div className="md:col-span-12 lg:col-span-4 xl:col-span-3 h-full">
                         <VestingTimer />
                     </div>
 
                     {/* Performance Chart */}
-                    <div className="md:col-span-12 lg:col-span-8 xl:col-span-9">
+                    <div className="md:col-span-12 lg:col-span-8 xl:col-span-9 h-full">
                         <PerformanceChart />
                     </div>
 

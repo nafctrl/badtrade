@@ -4,6 +4,8 @@ import { supabase, DUMMY_USER_ID } from '@/lib/supabase'
 export interface PortfolioData {
     pushupCount: number
     pushupTrend: number
+    pullupCount: number
+    pullupTrend: number
     loading: boolean
 }
 
@@ -11,6 +13,8 @@ export function usePortfolioData() {
     const [data, setData] = useState<PortfolioData>({
         pushupCount: 0,
         pushupTrend: 0,
+        pullupCount: 0,
+        pullupTrend: 0,
         loading: true
     })
 
@@ -25,7 +29,7 @@ export function usePortfolioData() {
                 // We use maybeSingle() because user might not exist yet if script failed backfill
                 const { data: stats, error: statsError } = await supabase
                     .from('user_stats')
-                    .select('total_pushups')
+                    .select('total_pushups, total_pullups')
                     .eq('user_id', DUMMY_USER_ID)
                     .maybeSingle()
 
@@ -35,26 +39,30 @@ export function usePortfolioData() {
 
                 // 2. Fetch TODAY'S Logs for Trend (+X Today)
                 // Filter specifically for pushups. This query is light (limited by date).
+                // Fetch ALL today logs (for both push and pull)
                 const todayStr = new Date().toISOString().split('T')[0]
                 const { data: todayLogs, error: logError } = await supabase
                     .from('mining_logs')
-                    .select('reps')
+                    .select('reps, exercise_type')
                     .eq('user_id', DUMMY_USER_ID)
                     .gte('created_at', `${todayStr}T00:00:00`)
-                    .ilike('exercise_type', '%push%')
 
                 if (logError) console.error("PORTFOLIO: Today logs error:", logError)
 
-                // Calculate Trend Client-side (Sum of today's logs)
-                const pushupToday = todayLogs?.reduce((sum, log) => sum + log.reps, 0) || 0;
+                // Calculate Trend Client-side
+                const pushupToday = todayLogs?.filter(log => log.exercise_type.toLowerCase().includes('push')).reduce((sum, log) => sum + log.reps, 0) || 0;
+                const pullupToday = todayLogs?.filter(log => log.exercise_type.toLowerCase().includes('pull')).reduce((sum, log) => sum + log.reps, 0) || 0;
 
                 // Total is from DB Aggregates (or 0 if new)
                 const pushupTotal = stats?.total_pushups || 0;
+                const pullupTotal = stats?.total_pullups || 0;
 
                 if (mounted) {
                     setData({
                         pushupCount: pushupTotal,
                         pushupTrend: pushupToday,
+                        pullupCount: pullupTotal,
+                        pullupTrend: pullupToday,
                         loading: false
                     })
                 }

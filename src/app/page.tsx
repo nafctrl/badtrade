@@ -32,7 +32,7 @@ export default function Home() {
         />
 
         {/* Main Content Area */}
-        <main className="lg:pl-64 pb-20 lg:pb-8 pt-16 lg:pt-8 px-4 lg:px-8 max-w-[1600px] mx-auto transition-all duration-300">
+        <main className="lg:pl-52 pb-20 lg:pb-8 pt-16 lg:pt-8 px-4 lg:px-8 max-w-[1600px] mx-auto transition-all duration-300">
 
           {/* Desktop Header */}
           <header className="hidden lg:flex justify-between items-center mb-8">
@@ -84,6 +84,8 @@ export default function Home() {
                   <KPIGrid
                     pushupCount={portfolioData.pushupCount}
                     pushupTrend={portfolioData.pushupTrend}
+                    pullupCount={portfolioData.pullupCount}
+                    pullupTrend={portfolioData.pullupTrend}
                     loading={portfolioData.loading}
                   />
                 </div>

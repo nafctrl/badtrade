@@ -57,11 +57,13 @@ function KPIItem({ label, value, icon: Icon, trend, trendUp, color, loading }: K
 interface KPIGridProps {
     pushupCount: number;
     pushupTrend: number;
+    pullupCount: number;
+    pullupTrend: number;
     loading: boolean;
 }
 
-export function KPIGrid({ pushupCount, pushupTrend, loading }: KPIGridProps) {
-    console.log("KPIGrid Rendered. Props:", { pushupCount, pushupTrend, loading });
+export function KPIGrid({ pushupCount, pushupTrend, pullupCount, pullupTrend, loading }: KPIGridProps) {
+    console.log("KPIGrid Rendered. Props:", { pushupCount, pushupTrend, pullupCount, pullupTrend, loading });
 
     return (
         <div className="grid grid-cols-2 gap-4 h-full">
@@ -76,11 +78,12 @@ export function KPIGrid({ pushupCount, pushupTrend, loading }: KPIGridProps) {
             />
             <KPIItem
                 label="Pull Ups"
-                value="45"
+                value={!loading ? pullupCount.toLocaleString() : "..."}
                 icon={Dumbbell}
                 color="text-brand-gold"
-                trend="+5 Today"
+                trend={!loading ? `+${pullupTrend} Today` : "..."}
                 trendUp={true}
+                loading={loading}
             />
             <KPIItem
                 label="Tokens Purified"

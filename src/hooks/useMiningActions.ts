@@ -79,7 +79,29 @@ export function useMiningActions() {
             }
         }
 
-        // 4. Notify global listeners
+        // 4. Update user_stats if exercise is read-quran
+        if (exerciseId === 'read-quran' && reps > 0) {
+            const { data: statsData } = await supabase
+                .from('user_stats')
+                .select('total_quran')
+                .eq('user_id', DUMMY_USER_ID)
+                .maybeSingle()
+
+            if (statsData) {
+                await supabase
+                    .from('user_stats')
+                    .update({ total_quran: Number(statsData.total_quran || 0) + reps })
+                    .eq('user_id', DUMMY_USER_ID)
+            } else {
+                await supabase.from('user_stats').insert({
+                    user_id: DUMMY_USER_ID,
+                    total_quran: reps,
+                    total_pushups: 0
+                })
+            }
+        }
+
+        // 5. Notify global listeners
         window.dispatchEvent(new Event('portfolio-updated'))
     }
 

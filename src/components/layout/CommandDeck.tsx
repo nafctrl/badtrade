@@ -39,7 +39,7 @@ export function CommandDeck({ activeTab, onTabChange, onSettingsClick }: Command
     return (
         <div className="fixed z-50 transition-all duration-300 ease-in-out">
             {/* Desktop Side Navigation */}
-            <div className="hidden lg:flex flex-col w-64 h-screen bg-brand-black border-r border-sidebar-border p-4 fixed left-0 top-0">
+            <div className="hidden lg:flex flex-col w-52 h-screen bg-brand-black border-r border-sidebar-border p-4 fixed left-0 top-0">
                 <div className="flex items-center gap-2 mb-10 px-2 mt-4">
                     <div className="w-8 h-8 rounded bg-gradient-to-br from-brand-gold to-brand-red flex items-center justify-center font-bold text-black">
                         B
@@ -87,7 +87,7 @@ export function CommandDeck({ activeTab, onTabChange, onSettingsClick }: Command
             </div>
 
             {/* Mobile Bottom Navigation */}
-            <div className="lg:hidden fixed bottom-0 left-0 w-full bg-brand-black border-t border-sidebar-border z-50 pb-safe">
+            <div className="lg:hidden fixed bottom-0 left-0 w-full bg-brand-black/90 backdrop-blur-xl border-t border-sidebar-border z-50 pb-safe">
                 <div className="flex justify-around items-center h-16">
                     {navItems.map((item) => (
                         <button

@@ -93,10 +93,35 @@ export function MarketplacePage({ className }: MarketplacePageProps) {
 
         const newBalance = currentBalance - selectedItem.cost
 
-        // Update Supabase
+        // Update user balances
         await supabase
             .from('user_tokens')
             .upsert({ user_id: DUMMY_USER_ID, [tokenField]: newBalance }, { onConflict: 'user_id' })
+
+        // Update daily_stats for burn rate
+        if (selectedItem.tokenType === 'red' || selectedItem.tokenType === 'gold') {
+            const todayStr = new Date().toISOString().split('T')[0];
+            const statField = selectedItem.tokenType === 'red' ? 'red_burned' : 'gold_burned';
+
+            // Note: Since upsert doesn't easily do increment in Supabase without RPC, we can fetch, then increment.
+            const { data: currentStats } = await supabase
+                .from('daily_stats')
+                .select(statField)
+                .eq('user_id', DUMMY_USER_ID)
+                .eq('date', todayStr)
+                .maybeSingle();
+
+            const currentBurn = currentStats ? ((currentStats as Record<string, number>)[statField] || 0) : 0;
+            const newBurn = currentBurn + selectedItem.cost;
+
+            await supabase
+                .from('daily_stats')
+                .upsert({
+                    user_id: DUMMY_USER_ID,
+                    date: todayStr,
+                    [statField]: newBurn
+                }, { onConflict: 'user_id,date' });
+        }
 
         // Update local state
         if (selectedItem.tokenType === "red") setRedTokens(newBalance)
